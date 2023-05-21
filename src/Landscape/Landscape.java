@@ -2,6 +2,8 @@ package Landscape;
 
 import javafx.scene.Group;
 import javafx.scene.PointLight;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 
@@ -12,6 +14,8 @@ public class Landscape
     public static Box surface;
     public static Collection<Sphere> hills;
     public static PointLight pointLight;
+
+    public static Sphere player;
 
     public static Group createLandscape()
     {
@@ -29,6 +33,10 @@ public class Landscape
         hills = Hill.createHills();
         groupOfLandscapeElements.getChildren().addAll(hills);
 
+
+        player = createPlayerSphere();
+        groupOfLandscapeElements.getChildren().add(player);
+
         return groupOfLandscapeElements;
     }
 
@@ -37,5 +45,16 @@ public class Landscape
         surface.translateXProperty().set(700);
         surface.translateYProperty().set(800-200);
         surface.translateZProperty().set(650);
+    }
+
+    private static Sphere createPlayerSphere()
+    {
+        Sphere player = new Sphere(50); // radius
+        player.setMaterial(new PhongMaterial(Color.BLUE));
+        player.setTranslateX(700);
+        player.setTranslateY(500);
+        player.setTranslateZ(-3700); // Zu Beginn kein Schnitt mit einer Halbkugel (Berg)
+
+        return player;
     }
 }

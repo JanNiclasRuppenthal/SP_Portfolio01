@@ -32,7 +32,7 @@ public class Hill extends Node
     {
         Collection<Sphere> collectionHills = new ArrayList<>();
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 25; i++) // Erstelle 25 Berge aus Halbkugeln
         {
             int radius = 100 + (int) (Math.random() * 100);
 

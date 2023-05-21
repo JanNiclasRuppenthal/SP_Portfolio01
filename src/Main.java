@@ -6,6 +6,8 @@ import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+//TODO: Mit der zweiten Teilaufgabe beginnen.
+
 public class Main extends Application {
 
     private static final int WIDTH = 1400;
@@ -19,7 +21,7 @@ public class Main extends Application {
         Camera camera = new PerspectiveCamera(false);
         camera.setTranslateZ(-3500);
         Scene scene = new Scene(landscape, WIDTH, HEIGHT, true);
-        scene.setFill(Color.BLUE);
+        scene.setFill(Color.LIGHTBLUE);
         scene.setCamera(camera);
 
         Controller.addControls(primaryStage, landscape);
