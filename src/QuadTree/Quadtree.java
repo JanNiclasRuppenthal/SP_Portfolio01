@@ -1,15 +1,15 @@
 package QuadTree;
 
-import javafx.scene.Node;
+import javafx.scene.shape.Sphere;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Quadtree {
-    private static final int MAX_OBJECTS = 10;
     private static final int MAX_LEVELS = 5;
 
     private int level;
-    private List<Node> objects;
+    private List<Sphere> objects;
     private Quadtree[] nodes;
     private double x;
     private double y;
@@ -49,14 +49,70 @@ public class Quadtree {
         nodes[3] = new Quadtree(xMid, yMid, subWidth, subHeight);
     }
 
-    private int getIndex(Node node) {
+    public void insert(Sphere sphere) {
+        if (!shouldAddToQuadtree(sphere)) {
+            return;
+        }
+
+        if (nodes[0] != null) {
+            int index = getIndex(sphere);
+
+            if (index != -1) {
+                nodes[index].insert(sphere);
+                return;
+            }
+        }
+
+        objects.add(sphere);
+
+        if (objects.size() > 1 && level < MAX_LEVELS) {
+            if (nodes[0] == null) {
+                split();
+            }
+
+            int i = 0;
+            while (i < objects.size()) {
+                int index = getIndex(objects.get(i));
+                if (index != -1) {
+                    nodes[index].insert(objects.remove(i));
+                } else {
+                    i++;
+                }
+            }
+        }
+    }
+
+    public boolean shouldAddToQuadtree(Sphere sphere) {
+        for (Sphere existingSphere : objects) {
+            if (isSphereCovering(sphere, existingSphere)) {
+                objects.remove(existingSphere);
+                return true;
+            }
+        }
+        return true;
+    }
+
+    public boolean isSphereCovering(Sphere sphere1, Sphere sphere2) {
+        double leftXPositionSphere1 = sphere1.getTranslateX() - sphere1.getRadius();
+        double rightXPositionSphere1 = sphere1.getTranslateX() + sphere1.getRadius();
+        double topYPositionSphere1 = sphere1.getTranslateY() - sphere1.getRadius();
+
+        double leftXPositionSphere2 = sphere2.getTranslateX() - sphere2.getRadius();
+        double rightXPositionSphere2 = sphere2.getTranslateX() + sphere2.getRadius();
+        double topYPositionSphere2 = sphere2.getTranslateY() - sphere2.getRadius();
+
+        return (leftXPositionSphere1 <= leftXPositionSphere2 && rightXPositionSphere1 >= rightXPositionSphere2 && topYPositionSphere1 <= topYPositionSphere2);
+    }
+
+
+    private int getIndex(Sphere sphere) {
         int index = -1;
         double xMid = x + (width / 2);
         double yMid = y + (height / 2);
-        boolean topQuad = (node.getTranslateY() < yMid && node.getTranslateY() + node.getBoundsInLocal().getHeight() < yMid);
-        boolean bottomQuad = (node.getTranslateY() > yMid);
-        boolean leftQuad = (node.getTranslateX() < xMid && node.getTranslateX() + node.getBoundsInLocal().getWidth() < xMid);
-        boolean rightQuad = (node.getTranslateX() > xMid);
+        boolean topQuad = (sphere.getTranslateY() < yMid && sphere.getTranslateY() + sphere.getRadius() < yMid);
+        boolean bottomQuad = (sphere.getTranslateY() > yMid);
+        boolean leftQuad = (sphere.getTranslateX() < xMid && sphere.getTranslateX() + sphere.getRadius() < xMid);
+        boolean rightQuad = (sphere.getTranslateX() > xMid);
 
         if (topQuad) {
             if (leftQuad) {
@@ -75,73 +131,29 @@ public class Quadtree {
         return index;
     }
 
-    public void insert(Node node) {
-        if (!shouldAddToQuadtree(node)) {
-            return;
-        }
-
-        if (nodes[0] != null) {
-            int index = getIndex(node);
-
-            if (index != -1) {
-                nodes[index].insert(node);
-                return;
-            }
-        }
-
-        objects.add(node);
-
-        if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS) {
-            if (nodes[0] == null) {
-                split();
-            }
-
-            int i = 0;
-            while (i < objects.size()) {
-                int index = getIndex(objects.get(i));
-                if (index != -1) {
-                    nodes[index].insert(objects.remove(i));
-                } else {
-                    i++;
-                }
-            }
-        }
-    }
-
-    public boolean shouldAddToQuadtree(Node node) {
-        double nodeX = node.getTranslateX();
-        double nodeY = node.getTranslateY();
-        double nodeWidth = node.getBoundsInLocal().getWidth();
-        double nodeHeight = node.getBoundsInLocal().getHeight();
-
-        boolean insideX = nodeX + nodeWidth >= x && nodeX <= x + width;
-        boolean insideY = nodeY + nodeHeight >= y && nodeY <= y + height;
-
-        return insideX && insideY;
-    }
-
-    public List<Node> retrieve(Node node) {
-        List<Node> result = new ArrayList<>();
-        int index = getIndex(node);
+    public List<Sphere> retrieve(Sphere sphere) {
+        List<Sphere> result = new ArrayList<>();
+        int index = getIndex(sphere);
 
         if (index != -1 && nodes[0] != null) {
-            result.addAll(nodes[index].retrieve(node));
+            result.addAll(nodes[index].retrieve(sphere));
         }
 
         result.addAll(objects);
         return result;
     }
 
-    public boolean contains(Node node) {
-        if (!objects.contains(node)) {
-            return false;
+    public boolean contains(Sphere sphere) {
+
+        if (objects.contains(sphere)) {
+            return true;
         }
 
-        int index = getIndex(node);
+        int index = getIndex(sphere);
         if (index != -1 && nodes[0] != null) {
-            return nodes[index].contains(node);
+            return nodes[index].contains(sphere);
         }
 
-        return true;
+        return false;
     }
 }

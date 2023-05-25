@@ -1,6 +1,7 @@
 package Controls;
 
 import Landscape.Landscape;
+import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -9,13 +10,14 @@ import javafx.stage.Stage;
 
 public class Controller
 {
-    public static void addControls(Stage primaryStage, Group landscape)
+    public static void addControls(Stage primaryStage, Group landscape, Camera camera)
     {
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case W:
 
-                    landscape.translateZProperty().set(landscape.getTranslateZ() - 100);
+//                    landscape.translateZProperty().set(landscape.getTranslateZ() - 100);
+                    camera.translateZProperty().set(camera.getTranslateZ() + 100);
                     Landscape.player.translateZProperty().set(Landscape.player.getTranslateZ() + 100);
 
                     // Bewege das PointLight ebenfalls nach vorne
