@@ -63,6 +63,13 @@ public class Hill extends Node
             collectionHills.add(hill);
         }
 
+        Sphere testHill = new Sphere(100);
+        testHill.setTranslateX(-300);
+        testHill.setTranslateY(600);
+        testHill.setTranslateZ(-3500);
+        testHill.setMaterial(new PhongMaterial(Color.WHITE));
+        collectionHills.add(testHill);
+
         /*
         // Erzeuge eine Halbkugel
         Sphere hill = new Sphere(100); // radius = [100, 200]

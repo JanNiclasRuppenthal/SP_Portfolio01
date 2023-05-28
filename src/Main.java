@@ -4,6 +4,7 @@ import QuadTree.Quadtree;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
@@ -30,42 +31,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         landscape = Landscape.createLandscape();
 
-
         Quadtree quadtree = new Quadtree(0, 0, WIDTH, HEIGHT);
-
-// Füge die Nodes dem Quadtree hinzu, wenn sie sich im betrachteten Rechteck befinden
-//        for (Node node : landscape.getChildren()) {
-//            if (!(node instanceof Sphere))
-//            {
-//                continue;
-//            }
-//            if (quadtree.shouldAddToQuadtree((Sphere) node)) {
-//                quadtree.insert((Sphere) node);
-//            }
-//        }
-//
-//
-//        int countTrue = 0;
-//        int countFalse = 0;
-//        for (Node node : landscape.getChildren())
-//        {
-//            if (!(node instanceof Sphere)) continue;
-//            if (quadtree.contains((Sphere) node))
-//            {
-//                countTrue++;
-////                ((Sphere) node).setMaterial(new PhongMaterial(Color.BLUE));
-//                ((Sphere) node).setVisible(true);
-//            }
-//            else
-//            {
-//                countFalse++;
-////                ((Sphere) node).setMaterial(new PhongMaterial(Color.YELLOW));
-//                node.setVisible(false);
-//            }
-//        }
-//
-//        System.out.println(countTrue);
-//        System.out.println(countFalse);
 
         Camera camera = new PerspectiveCamera(false);
         camera.setTranslateZ(-3500);
@@ -90,30 +56,29 @@ public class Main extends Application {
                         continue;
                     }
 
-//                    System.out.println(node.getTranslateZ());
                     if (node.getTranslateZ() >= camera.getTranslateZ()-1500
                                     && quadtree.shouldAddToQuadtree((Sphere) node) ) {
                         quadtree.insert((Sphere) node);
                     }
                 }
 
-//                int countTrue = 0;
-//                int countFalse = 0;
+                int countTrue = 0;
+                int countFalse = 0;
                 for (Node node : landscape.getChildren()) {
                     if (!(node instanceof Sphere)) {
                         continue;
                     }
                     if (quadtree.contains((Sphere) node)) {
-//                        countTrue++;
+                        countTrue++;
                         node.setVisible(true);
                     } else {
-//                        countFalse++;
+                        countFalse++;
                         node.setVisible(false);
                     }
                 }
 
-//                System.out.println(countTrue);
-//                System.out.println(countFalse);
+                System.out.println(countTrue);
+                System.out.println(countFalse);
             }
         };
 

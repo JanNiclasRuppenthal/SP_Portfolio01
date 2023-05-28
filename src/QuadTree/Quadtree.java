@@ -1,7 +1,6 @@
 package QuadTree;
 
 import javafx.scene.shape.Sphere;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,27 +82,14 @@ public class Quadtree {
     }
 
     public boolean shouldAddToQuadtree(Sphere sphere) {
-        for (Sphere existingSphere : objects) {
-            if (isSphereCovering(sphere, existingSphere)) {
-                objects.remove(existingSphere);
-                return true;
-            }
-        }
-        return true;
+        double leftXPositionSphere = sphere.getTranslateX() - sphere.getRadius();
+        double rightXPositionSphere = sphere.getTranslateX() + sphere.getRadius();
+        double topYPositionSphere = sphere.getTranslateY() - sphere.getRadius();
+
+        boolean isInsideBounds = leftXPositionSphere >= x && rightXPositionSphere <= x + width && topYPositionSphere >= y ;
+
+        return isInsideBounds ;
     }
-
-    public boolean isSphereCovering(Sphere sphere1, Sphere sphere2) {
-        double leftXPositionSphere1 = sphere1.getTranslateX() - sphere1.getRadius();
-        double rightXPositionSphere1 = sphere1.getTranslateX() + sphere1.getRadius();
-        double topYPositionSphere1 = sphere1.getTranslateY() - sphere1.getRadius();
-
-        double leftXPositionSphere2 = sphere2.getTranslateX() - sphere2.getRadius();
-        double rightXPositionSphere2 = sphere2.getTranslateX() + sphere2.getRadius();
-        double topYPositionSphere2 = sphere2.getTranslateY() - sphere2.getRadius();
-
-        return (leftXPositionSphere1 <= leftXPositionSphere2 && rightXPositionSphere1 >= rightXPositionSphere2 && topYPositionSphere1 <= topYPositionSphere2);
-    }
-
 
     private int getIndex(Sphere sphere) {
         int index = -1;
@@ -144,7 +130,6 @@ public class Quadtree {
     }
 
     public boolean contains(Sphere sphere) {
-
         if (objects.contains(sphere)) {
             return true;
         }

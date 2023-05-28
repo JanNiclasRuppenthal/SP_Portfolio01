@@ -16,8 +16,6 @@ public class Controller
             Sphere sphere = null;
             switch (event.getCode()) {
                 case W:
-
-//                    landscape.translateZProperty().set(landscape.getTranslateZ() - 100);
                     camera.translateZProperty().set(camera.getTranslateZ() + 100);
                     Landscape.player.translateZProperty().set(Landscape.player.getTranslateZ() + 100);
 
