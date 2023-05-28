@@ -5,9 +5,16 @@ import javafx.scene.paint.Color;
 
 public class Lights
 {
-    public static PointLight createLights()
+    public PointLight pointLight;
+
+    public Lights()
     {
-        PointLight pointLight = new PointLight();
+        createLights();
+    }
+
+    public PointLight createLights()
+    {
+        pointLight = new PointLight();
         pointLight.setColor(Color.WHITE); // Setze die Farbe des PointLight
         pointLight.setTranslateX(700); // Setze die Position des PointLight
         pointLight.setTranslateY(-400);
