@@ -26,6 +26,7 @@ public class Main extends Application {
     private static final int WIDTH = 1400;
     private static final int HEIGHT = 800;
     private Group landscape;
+    private Controller controller;
 
     @Override
     public void start(Stage primaryStage) {
@@ -39,7 +40,8 @@ public class Main extends Application {
         scene.setFill(Color.LIGHTBLUE);
         scene.setCamera(camera);
 
-        Controller.addControls(primaryStage, landscape, camera);
+        controller = new Controller(primaryStage, landscape, camera);
+        controller.addControls();
 
         primaryStage.setTitle("Landscape Generator");
         primaryStage.setScene(scene);
@@ -77,13 +79,18 @@ public class Main extends Application {
                     }
                 }
 
-                System.out.println(countTrue);
-                System.out.println(countFalse);
+//                System.out.println(countTrue);
+//                System.out.println(countFalse);
             }
         };
 
         animationTimer.start();
 
+    }
+
+    @Override
+    public void stop(){
+        controller.interrupt();
     }
 
 
