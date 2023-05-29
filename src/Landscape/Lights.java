@@ -18,7 +18,7 @@ public class Lights
         pointLight.setColor(Color.WHITE); // Setze die Farbe des PointLight
         pointLight.setTranslateX(700); // Setze die Position des PointLight
         pointLight.setTranslateY(-400);
-        pointLight.setTranslateZ(-4500);
+        pointLight.setTranslateZ(-1000);
 
         return pointLight;
     }

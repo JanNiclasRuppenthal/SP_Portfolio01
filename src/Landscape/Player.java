@@ -19,7 +19,7 @@ public class Player
         player.setMaterial(new PhongMaterial(Color.BLUE));
         player.setTranslateX(700);
         player.setTranslateY(500);
-        player.setTranslateZ(-3700); // Zu Beginn kein Schnitt mit einer Halbkugel (Berg)
+        player.setTranslateZ(-200); // Zu Beginn kein Schnitt mit einer Halbkugel (Berg)
 
         return player;
     }

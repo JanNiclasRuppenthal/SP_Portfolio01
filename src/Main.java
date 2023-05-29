@@ -18,6 +18,7 @@ public class Main extends Application
 
     private static final int WIDTH = 1400;
     private static final int HEIGHT = 800;
+    private PerspectiveCamera camera;
     private Group landscape;
     private Controller controller;
     private LandscapeGenerator landscapeGenerator;
@@ -31,7 +32,7 @@ public class Main extends Application
         landscapeGeneratorCollection.add(landscapeGenerator);
         landscape = landscapeGenerator.createLandscape(depth);
 
-        for (int i = 0; i < 4; i++) // Erzeuge weitere 4 Landschaften vor dem Spieler
+        for (int i = 0; i < 6; i++) // Erzeuge weitere 6 Landschaften vor dem Spieler
         {
             depth += 3500;
             landscapeGenerator.createLandscape(depth);
@@ -47,8 +48,8 @@ public class Main extends Application
 
         Quadtree quadtree = new Quadtree(0, 0, WIDTH, HEIGHT);
 
-        Camera camera = new PerspectiveCamera(false);
-        camera.setTranslateZ(-3500);
+        camera = new PerspectiveCamera(false);
+        camera.setTranslateZ(0);
         Scene scene = new Scene(landscape, WIDTH, HEIGHT, true);
         scene.setFill(Color.LIGHTBLUE);
         scene.setCamera(camera);
@@ -75,7 +76,7 @@ public class Main extends Application
                         continue;
                     }
 
-                    if (node.getTranslateZ() >= camera.getTranslateZ()-1500
+                    if (isSphereInViewingFrustum((Sphere) node, camera.getTranslateX(), camera.getTranslateY(), camera.getTranslateZ())
                                     && quadtree.shouldAddToQuadtree((Sphere) node) )
                     {
                         quadtree.insert((Sphere) node);
@@ -91,7 +92,8 @@ public class Main extends Application
                     if (quadtree.contains((Sphere) node))
                     {
                         node.setVisible(true);
-                    } else
+                    }
+                    else
                     {
                         node.setVisible(false);
                     }
@@ -141,6 +143,31 @@ public class Main extends Application
 
         endlessLandscape.start();
     }
+
+
+    private boolean isSphereInViewingFrustum(Sphere sphere, double cameraX, double cameraY, double cameraZ) {
+        double sphereX = sphere.getTranslateX();
+        double sphereY = sphere.getTranslateY();
+        double sphereZ = sphere.getTranslateZ();
+        double sphereRadius = sphere.getRadius();
+
+        // Berechnen Sie die Richtungsvektoren von der Kamera zur Kugel
+        double directionX = sphereX - cameraX;
+        double directionY = sphereY - cameraY;
+        double directionZ = sphereZ - cameraZ;
+
+        // Berechnen Sie die Distanz zwischen Kamera und Kugel
+        double distance = Math.sqrt(directionX * directionX + directionY * directionY + directionZ * directionZ);
+
+        // Überprüfen Sie, ob die Kugel im Viewing Frustum liegt
+        double nearPlane = camera.getNearClip()-15000; // Nähe Schnittebene
+        double farPlane = 15000; // Ferne Schnittebene
+
+        // Überprüfen Sie die Sichtbarkeit der Kugel basierend auf dem Viewing Frustum
+        return  distance - sphereRadius < farPlane
+                && distance + sphereRadius > nearPlane;
+    }
+
 
     @Override
     public void stop()

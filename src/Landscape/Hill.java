@@ -1,6 +1,7 @@
 package Landscape;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
@@ -34,13 +35,18 @@ public class Hill extends Node
             // Berechne die Position der Halbkugel basierend auf der Box
             hill.setTranslateX(xPosition); // X-Position der Box [0+radius, 14000 - radius]
             hill.setTranslateY(600); // Y-Position der Box [600]
-            double zPosition =  (-3500 + depth) + (Math.random() * (9000-radius));
-            hill.setTranslateZ(zPosition); // Z-Position der Box [-3500, 5500-radius]
+            double zPosition =  (depth+200) + (Math.random() * (9000-radius));
+            hill.setTranslateZ(zPosition); // Z-Position der Box [depth, 9000-radius]
 
             // Setze das Material der Halbkugel
-            PhongMaterial hillMaterial = new PhongMaterial();
-            hillMaterial.setDiffuseColor(Color.BROWN); // Setze die Farbe der Halbkugel
-            hill.setMaterial(hillMaterial);
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseColor(Color.RED); // Setze die Farbe der Halbkugel
+
+//            PhongMaterial material = new PhongMaterial();
+//            Image texture = new Image("/black-stone.jpg");
+//            material.setDiffuseMap(texture);
+
+            hill.setMaterial(material);
 
             collectionHills.add(hill);
         }
