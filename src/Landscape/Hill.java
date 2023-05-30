@@ -35,8 +35,8 @@ public class Hill extends Node
             // Berechne die Position der Halbkugel basierend auf der Box
             hill.setTranslateX(xPosition); // X-Position der Box [0+radius, 14000 - radius]
             hill.setTranslateY(600); // Y-Position der Box [600]
-            double zPosition =  (depth+200) + (Math.random() * (9000-radius));
-            hill.setTranslateZ(zPosition); // Z-Position der Box [depth, 9000-radius]
+            double zPosition =  (depth) + (Math.random() * (3500-radius));
+            hill.setTranslateZ(zPosition); // Z-Position der Box [depth, 500-radius]
 
             // Setze das Material der Halbkugel
             PhongMaterial material = new PhongMaterial();

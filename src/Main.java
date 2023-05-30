@@ -32,7 +32,7 @@ public class Main extends Application
         landscapeGeneratorCollection.add(landscapeGenerator);
         landscape = landscapeGenerator.createLandscape(depth);
 
-        for (int i = 0; i < 6; i++) // Erzeuge weitere 6 Landschaften vor dem Spieler
+        for (int i = 0; i < 9; i++) // Erzeuge weitere 10 Landschaften vor dem Spieler
         {
             depth += 3500;
             landscapeGenerator.createLandscape(depth);
@@ -76,7 +76,7 @@ public class Main extends Application
                         continue;
                     }
 
-                    if (isSphereInViewingFrustum((Sphere) node, camera.getTranslateX(), camera.getTranslateY(), camera.getTranslateZ())
+                    if (isSphereInViewingFrustum((Sphere) node, camera.getTranslateZ())
                                     && quadtree.shouldAddToQuadtree((Sphere) node) )
                     {
                         quadtree.insert((Sphere) node);
@@ -109,7 +109,7 @@ public class Main extends Application
             @Override
             public void handle(long now)
             {
-                // Fuege weitere Landschaften hinzi
+                // Fuege weitere Landschaften hinzu
                 if (camera.getTranslateZ() > depth - 14000) // mind. 4 Landschaften vor dem Spieler (4*3500)
                 {
                     depth += 3500;
@@ -145,27 +145,17 @@ public class Main extends Application
     }
 
 
-    private boolean isSphereInViewingFrustum(Sphere sphere, double cameraX, double cameraY, double cameraZ) {
-        double sphereX = sphere.getTranslateX();
-        double sphereY = sphere.getTranslateY();
+    private boolean isSphereInViewingFrustum(Sphere sphere, double cameraZ) {
         double sphereZ = sphere.getTranslateZ();
         double sphereRadius = sphere.getRadius();
 
-        // Berechnen Sie die Richtungsvektoren von der Kamera zur Kugel
-        double directionX = sphereX - cameraX;
-        double directionY = sphereY - cameraY;
-        double directionZ = sphereZ - cameraZ;
-
-        // Berechnen Sie die Distanz zwischen Kamera und Kugel
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY + directionZ * directionZ);
-
         // Überprüfen Sie, ob die Kugel im Viewing Frustum liegt
-        double nearPlane = camera.getNearClip()-15000; // Nähe Schnittebene
-        double farPlane = 15000; // Ferne Schnittebene
+        double nearPlane = cameraZ - 1000; // Nähe Schnittebene
+        double farPlane = cameraZ + (3500*10); // Ferne Schnittebene
 
         // Überprüfen Sie die Sichtbarkeit der Kugel basierend auf dem Viewing Frustum
-        return  distance - sphereRadius < farPlane
-                && distance + sphereRadius > nearPlane;
+        return  sphereZ - sphereRadius < farPlane
+                && sphereZ + sphereRadius > nearPlane;
     }
 
 

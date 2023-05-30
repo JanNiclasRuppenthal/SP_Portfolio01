@@ -35,11 +35,11 @@ public class Controller extends Thread
     {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
-                case W:
+                case W: case UP:
                     velocity +=  0.1;
                     velocity = Math.round(velocity * 100) / 100.0;
                     break;
-                case S:
+                case S: case DOWN:
                     velocity = Math.round(velocity * 100) / 100.0;
                     velocity += (velocity <= 0) ? 0 : -0.1;
                     break;
@@ -49,11 +49,6 @@ public class Controller extends Thread
                     break;
             }
         });
-    }
-
-    public void setLandscape(Group landscape)
-    {
-        this.landscape = landscape;
     }
 
     @Override
