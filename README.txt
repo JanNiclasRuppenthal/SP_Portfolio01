@@ -7,6 +7,17 @@ Endloser Landschaftsgenerator!
 
 ------------------------------------------------------------------------------------------------------------------------
 
+Verwendete VM-Optionen in IntelliJ:
+--module-path
+"PATH\TO\JAVAFX"
+--add-modules=javafx.controls,javafx.fxml,javafx.graphics
+
+------------------------------------------------------------------------------------------------------------------------
+
+Für die Anwendugn der Texturen muss man den resources-Ordner auch als "Resources-Ordner" markieren.
+
+------------------------------------------------------------------------------------------------------------------------
+
 Assets fuer die Texturen:
 
 Designed by Freepik!
