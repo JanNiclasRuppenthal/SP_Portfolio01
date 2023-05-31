@@ -4,7 +4,8 @@ import javafx.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Quadtree {
+public class Quadtree
+{
     private static final int MAX_LEVELS = 5;
 
     private int level;
@@ -15,7 +16,8 @@ public class Quadtree {
     private double width;
     private double height;
 
-    public Quadtree(double x, double y, double width, double height) {
+    public Quadtree(double x, double y, double width, double height)
+    {
         this.level = 0;
         this.objects = new ArrayList<>();
         this.nodes = new Quadtree[4];
@@ -25,18 +27,22 @@ public class Quadtree {
         this.height = height;
     }
 
-    public void clear() {
+    public void clear()
+    {
         objects.clear();
 
-        for (int i = 0; i < nodes.length; i++) {
-            if (nodes[i] != null) {
+        for (int i = 0; i < nodes.length; i++)
+        {
+            if (nodes[i] != null)
+            {
                 nodes[i].clear();
                 nodes[i] = null;
             }
         }
     }
 
-    private void split() {
+    private void split()
+    {
         double subWidth = width / 2;
         double subHeight = height / 2;
         double xMid = x + subWidth;
@@ -48,15 +54,19 @@ public class Quadtree {
         nodes[3] = new Quadtree(xMid, yMid, subWidth, subHeight);
     }
 
-    public void insert(Sphere sphere) {
-        if (!shouldAddToQuadtree(sphere)) {
+    public void insert(Sphere sphere)
+    {
+        if (!shouldAddToQuadtree(sphere))
+        {
             return;
         }
 
-        if (nodes[0] != null) {
+        if (nodes[0] != null)
+        {
             int index = getIndex(sphere);
 
-            if (index != -1) {
+            if (index != -1)
+            {
                 nodes[index].insert(sphere);
                 return;
             }
@@ -64,34 +74,39 @@ public class Quadtree {
 
         objects.add(sphere);
 
-        if (objects.size() > 1 && level < MAX_LEVELS) {
-            if (nodes[0] == null) {
+        if (objects.size() > 1 && level < MAX_LEVELS)
+        {
+            if (nodes[0] == null)
+            {
                 split();
             }
 
             int i = 0;
-            while (i < objects.size()) {
+            while (i < objects.size())
+            {
                 int index = getIndex(objects.get(i));
-                if (index != -1) {
+                if (index != -1)
+                {
                     nodes[index].insert(objects.remove(i));
-                } else {
+                } else
+                {
                     i++;
                 }
             }
         }
     }
 
-    public boolean shouldAddToQuadtree(Sphere sphere) {
+    public boolean shouldAddToQuadtree(Sphere sphere)
+    {
         double leftXPositionSphere = sphere.getTranslateX() - sphere.getRadius();
         double rightXPositionSphere = sphere.getTranslateX() + sphere.getRadius();
         double topYPositionSphere = sphere.getTranslateY() - sphere.getRadius();
 
-        boolean isInsideBounds = leftXPositionSphere >= x && rightXPositionSphere <= x + width && topYPositionSphere >= y ;
-
-        return isInsideBounds ;
+        return leftXPositionSphere >= x && rightXPositionSphere <= x + width && topYPositionSphere >= y;
     }
 
-    private int getIndex(Sphere sphere) {
+    private int getIndex(Sphere sphere)
+    {
         int index = -1;
         double xMid = x + (width / 2);
         double yMid = y + (height / 2);
@@ -100,16 +115,22 @@ public class Quadtree {
         boolean leftQuad = (sphere.getTranslateX() < xMid && sphere.getTranslateX() + sphere.getRadius() < xMid);
         boolean rightQuad = (sphere.getTranslateX() > xMid);
 
-        if (topQuad) {
-            if (leftQuad) {
+        if (topQuad)
+        {
+            if (leftQuad)
+            {
                 index = 0; // Top left
-            } else if (rightQuad) {
+            } else if (rightQuad)
+            {
                 index = 1; // Top right
             }
-        } else if (bottomQuad) {
-            if (leftQuad) {
+        } else if (bottomQuad)
+        {
+            if (leftQuad)
+            {
                 index = 2; // Bottom left
-            } else if (rightQuad) {
+            } else if (rightQuad)
+            {
                 index = 3; // Bottom right
             }
         }
@@ -117,25 +138,17 @@ public class Quadtree {
         return index;
     }
 
-    public List<Sphere> retrieve(Sphere sphere) {
-        List<Sphere> result = new ArrayList<>();
-        int index = getIndex(sphere);
 
-        if (index != -1 && nodes[0] != null) {
-            result.addAll(nodes[index].retrieve(sphere));
-        }
-
-        result.addAll(objects);
-        return result;
-    }
-
-    public boolean contains(Sphere sphere) {
-        if (objects.contains(sphere)) {
+    public boolean contains(Sphere sphere)
+    {
+        if (objects.contains(sphere))
+        {
             return true;
         }
 
         int index = getIndex(sphere);
-        if (index != -1 && nodes[0] != null) {
+        if (index != -1 && nodes[0] != null)
+        {
             return nodes[index].contains(sphere);
         }
 

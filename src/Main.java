@@ -76,7 +76,7 @@ public class Main extends Application
                         continue;
                     }
 
-                    if (isSphereInViewingFrustum((Sphere) node, camera.getTranslateZ())
+                    if (isSphereInViewingFrustrum((Sphere) node, camera.getTranslateZ())
                                     && quadtree.shouldAddToQuadtree((Sphere) node) )
                     {
                         quadtree.insert((Sphere) node);
@@ -135,9 +135,6 @@ public class Main extends Application
                         }
                     }
                 }
-
-
-
             }
         };
 
@@ -145,15 +142,15 @@ public class Main extends Application
     }
 
 
-    private boolean isSphereInViewingFrustum(Sphere sphere, double cameraZ) {
+    private boolean isSphereInViewingFrustrum(Sphere sphere, double cameraZ) {
         double sphereZ = sphere.getTranslateZ();
         double sphereRadius = sphere.getRadius();
 
-        // Überprüfen Sie, ob die Kugel im Viewing Frustum liegt
+        // Überprüfen Sie, ob die Kugel im Viewing Frustrum liegt
         double nearPlane = cameraZ - 1000; // Nähe Schnittebene
         double farPlane = cameraZ + (3500*10); // Ferne Schnittebene
 
-        // Überprüfen Sie die Sichtbarkeit der Kugel basierend auf dem Viewing Frustum
+        // Überprüfen Sie die Sichtbarkeit der Kugel basierend auf dem Viewing Frustrum
         return  sphereZ - sphereRadius < farPlane
                 && sphereZ + sphereRadius > nearPlane;
     }

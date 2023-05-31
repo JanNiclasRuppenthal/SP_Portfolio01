@@ -36,12 +36,12 @@ public class Controller extends Thread
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case W: case UP:
-                    velocity +=  0.1;
+                    velocity +=  0.2;
                     velocity = Math.round(velocity * 100) / 100.0;
                     break;
                 case S: case DOWN:
                     velocity = Math.round(velocity * 100) / 100.0;
-                    velocity += (velocity <= 0) ? 0 : -0.1;
+                    velocity += (velocity <= 0) ? 0 : -0.2;
                     break;
                 case ESCAPE:
                     this.interrupt();
@@ -88,6 +88,7 @@ public class Controller extends Thread
 
             try
             {
+                // busy-waiting
                 sleep(50);
             } catch (InterruptedException e)
             {

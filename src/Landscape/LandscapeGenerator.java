@@ -31,7 +31,7 @@ public class LandscapeGenerator
     private void setSurfaceToTheCorrectPositionInScene(Box surface)
     {
         surface.translateXProperty().set(700);
-        surface.translateYProperty().set(800-200);
+        surface.translateYProperty().set(600);
         surface.translateZProperty().set(650 + depth);
     }
 }
