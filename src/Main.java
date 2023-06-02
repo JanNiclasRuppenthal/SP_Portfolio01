@@ -110,7 +110,7 @@ public class Main extends Application
             public void handle(long now)
             {
                 // Fuege weitere Landschaften hinzu
-                if (camera.getTranslateZ() > depth - 14000) // mind. 4 Landschaften vor dem Spieler (4*3500)
+                if (camera.getTranslateZ() > depth - 35000) // mind. 10 Landschaften vor dem Spieler (10*3500)
                 {
                     depth += 3500;
                     landscapeGenerator.createLandscape(depth);
