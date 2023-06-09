@@ -5,8 +5,10 @@ import Landscape.Lights;
 import QuadTree.Quadtree;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
@@ -71,33 +73,40 @@ public class Main extends Application
 
                 for (Node node : landscape.getChildren())
                 {
-                    if (!(node instanceof Sphere))
+                    if (!(node instanceof MeshView))
                     {
                         continue;
                     }
 
-                    if (isSphereInViewingFrustrum((Sphere) node, camera.getTranslateZ())
-                                    && quadtree.shouldAddToQuadtree((Sphere) node) )
+                    if (quadtree.shouldAddToQuadtree((MeshView) node) )
                     {
-                        quadtree.insert((Sphere) node);
+                        quadtree.insert((MeshView) node);
                     }
                 }
 
+
+                int isVisible = 0;
+                int isInvisible = 0;
                 for (Node node : landscape.getChildren())
                 {
-                    if (!(node instanceof Sphere))
+                    if (!(node instanceof MeshView))
                     {
                         continue;
                     }
-                    if (quadtree.contains((Sphere) node))
+                    if (quadtree.contains((MeshView) node))
                     {
                         node.setVisible(true);
+                        isVisible++;
                     }
                     else
                     {
                         node.setVisible(false);
+                        isInvisible++;
                     }
                 }
+
+                System.out.println(isVisible);
+                System.out.println(isInvisible);;
 
             }
         };
@@ -110,31 +119,31 @@ public class Main extends Application
             public void handle(long now)
             {
                 // Fuege weitere Landschaften hinzu
-                if (camera.getTranslateZ() > depth - 35000) // mind. 10 Landschaften vor dem Spieler (10*3500)
-                {
-                    depth += 3500;
-                    landscapeGenerator.createLandscape(depth);
-                    landscapeGeneratorCollection.add(landscapeGenerator);
-                    landscape.getChildren().add(landscapeGenerator.surface);
-                    landscape.getChildren().addAll(landscapeGenerator.hills);
-                }
+//                if (camera.getTranslateZ() > depth - 35000) // mind. 10 Landschaften vor dem Spieler (10*3500)
+//                {
+//                    depth += 3500;
+//                    landscapeGenerator.createLandscape(depth);
+//                    landscapeGeneratorCollection.add(landscapeGenerator);
+//                    landscape.getChildren().add(landscapeGenerator.surface);
+//                    landscape.getChildren().addAll(landscapeGenerator.hills);
+//                }
 
                 // Loesche hinter der Kamera stehende Landschaften
 
-                for (LandscapeGenerator generator :
-                        landscapeGeneratorCollection)
-                {
-                    // Entferne alle hintenstehenden Objekte mit einem
-                    // grosszuegigem Abstand
-                    if (player.playerSphere.getTranslateZ() > generator.depth + 7000)
-                    {
-                        landscape.getChildren().remove(generator.surface);
-                        for (Sphere hills : generator.hills)
-                        {
-                            landscape.getChildren().remove(hills);
-                        }
-                    }
-                }
+//                for (LandscapeGenerator generator :
+//                        landscapeGeneratorCollection)
+//                {
+//                    // Entferne alle hintenstehenden Objekte mit einem
+//                    // grosszuegigem Abstand
+//                    if (player.playerSphere.getTranslateZ() > generator.depth + 7000)
+//                    {
+//                        landscape.getChildren().remove(generator.surface);
+//                        for (Node hills : generator.hills)
+//                        {
+//                            landscape.getChildren().remove(hills);
+//                        }
+//                    }
+//                }
             }
         };
 
@@ -142,17 +151,24 @@ public class Main extends Application
     }
 
 
-    private boolean isSphereInViewingFrustrum(Sphere sphere, double cameraZ) {
-        double sphereZ = sphere.getTranslateZ();
-        double sphereRadius = sphere.getRadius();
+    private boolean isMeshViewInViewingFrustrum(MeshView meshView, double cameraZ) {
+        // Angenommen, das MeshView-Objekt hat eine Bounding-Box-Geometrie
 
-        // Überprüfen Sie, ob die Kugel im Viewing Frustrum liegt
+        // Holen Sie die Bounding Box des MeshViews
+        Bounds meshBounds = meshView.getBoundsInLocal();
+
+        // Transformieren Sie die Bounding Box basierend auf der Transformation des MeshViews
+        meshBounds = meshView.getLocalToSceneTransform().transform(meshBounds);
+
+        double meshMinZ = meshBounds.getMinZ();
+        double meshMaxZ = meshBounds.getMaxZ();
+
+        // Überprüfen Sie, ob das MeshView im Viewing Frustrum liegt
         double nearPlane = cameraZ - 1000; // Nähe Schnittebene
-        double farPlane = cameraZ + (3500*10); // Ferne Schnittebene
+        double farPlane = cameraZ + (3500 * 10); // Ferne Schnittebene
 
-        // Überprüfen Sie die Sichtbarkeit der Kugel basierend auf dem Viewing Frustrum
-        return  sphereZ - sphereRadius < farPlane
-                && sphereZ + sphereRadius > nearPlane;
+        // Überprüfen Sie die Sichtbarkeit des MeshView basierend auf dem Viewing Frustrum
+        return meshMaxZ > nearPlane && meshMinZ < farPlane;
     }
 
 

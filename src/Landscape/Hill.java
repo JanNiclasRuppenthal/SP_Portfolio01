@@ -1,19 +1,21 @@
 package Landscape;
 
+import Triangulation.TriangulationUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
+import javax.sound.midi.Track;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Hill extends Node
 {
-    public static Collection<Sphere> createHills(int depth)
+    public static Collection<Node> createHills(int depth)
     {
-        Collection<Sphere> collectionHills = new ArrayList<>();
+        Collection<Node> collectionHills = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) // Erstelle 25 Berge aus Halbkugeln
         {
@@ -48,7 +50,7 @@ public class Hill extends Node
 
             hill.setMaterial(material);
 
-            collectionHills.add(hill);
+            collectionHills.add((Node) TriangulationUtils.triangulateSphere(hill));
         }
 
         return collectionHills;

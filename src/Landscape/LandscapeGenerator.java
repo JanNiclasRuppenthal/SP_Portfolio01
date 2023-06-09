@@ -1,15 +1,15 @@
 package Landscape;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
 
 import java.util.Collection;
 
 public class LandscapeGenerator
 {
     public Box surface;
-    public Collection<Sphere> hills;
+    public Collection<Node> hills;
 
     public int depth;
 
